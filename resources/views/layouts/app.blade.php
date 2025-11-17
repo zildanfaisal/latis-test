@@ -15,6 +15,9 @@
     @stack('head')
     <!-- Tom Select (searchable selects) -->
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.tailwindcss.min.css">
+    @stack('styles')
 </head>
 <body class="font-sans antialiased bg-gray-100">
     <div x-data="{ sidebarCollapsed: (localStorage.getItem('sidebarCollapsed') === 'true'), mobileOpen: false }"
@@ -121,6 +124,10 @@
             </main>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.tailwindcss.min.js"></script>
 
     {{-- Vite: JS --}}
     @if (file_exists(public_path('mix-manifest.json')))

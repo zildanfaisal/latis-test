@@ -28,14 +28,14 @@
                         @if($lembagas->isEmpty())
                             <tbody>
                                 <tr>
-                                    <td colspan="2" class="text-center py-6">Belum Ada Lembaga.</td>
+                                    <td colspan="3" class="text-center py-6">Belum Ada Lembaga.</td>
                                 </tr>
                             </tbody>
                         @endif
                         <tbody>
                             @foreach ($lembagas as $lembaga)
                                 <tr class="text-center hover:bg-gray-50">
-                                    <td class="px-4 py-2 border">{{ $lembaga->id }}</td>
+                                    <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
                                     <td class="px-4 py-2 border">{{ $lembaga->nama_lembaga }}</td>
                                     <td class="px-4 py-2 border">
                                         <a href="{{ route('lembaga.edit', $lembaga->id) }}" class="text-blue-600 hover:underline">Edit</a>

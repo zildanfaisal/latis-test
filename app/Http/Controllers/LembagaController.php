@@ -31,11 +31,6 @@ class LembagaController extends Controller
         return redirect()->route('lembaga.index')->with('success', 'Lembaga created successfully.');
     }
 
-    public function show(Lembaga $lembaga)
-    {
-        return view('lembaga.show', compact('lembaga'));
-    }
-
     public function edit(Lembaga $lembaga)
     {
         return view('lembaga.edit', compact('lembaga'));
