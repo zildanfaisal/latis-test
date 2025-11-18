@@ -1,0 +1,7 @@
+[build]
+builder = "NIXPACKS"
+buildCommand = """
+composer install --no-dev --optimize-autoloader
+npm ci --omit=dev
+npm run build
+"""
