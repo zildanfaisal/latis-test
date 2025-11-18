@@ -1,10 +1,8 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = """
-composer install --no-dev --optimize-autoloader
-npm ci --omit=dev
-npm run build
-"""
+# Gabungkan semua perintah menjadi satu baris supaya Nixpacks membuat satu RUN layer yang valid.
+# (Sebelumnya hanya baris pertama diberi RUN sehingga baris 'npm' dianggap instruksi Docker yang tidak dikenal.)
+buildCommand = "composer install --no-dev --optimize-autoloader && npm ci --omit=dev && npm run build"
 
 [start]
 command = "php artisan serve --host 0.0.0.0 --port ${PORT}"
