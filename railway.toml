@@ -1,8 +1,9 @@
 [build]
 builder = "NIXPACKS"
-# Gabungkan semua perintah menjadi satu baris supaya Nixpacks membuat satu RUN layer yang valid.
-# (Sebelumnya hanya baris pertama diberi RUN sehingga baris 'npm' dianggap instruksi Docker yang tidak dikenal.)
-buildCommand = "composer install --no-dev --optimize-autoloader && npm ci --omit=dev && npm run build"
+# Urutan diperbaiki: install PHP deps (dev dihapus), install JS (termasuk dev) untuk build, lakukan build Vite,
+# lalu prune dev dependencies JS agar image lebih kecil. 'npm prune --production' lebih cepat dibanding npm ci ulang.
+# Jika perlu paket dev PHP untuk build (misal pint format, dll), hilangkan --no-dev.
+buildCommand = "composer install --no-dev --optimize-autoloader && npm ci && npm run build && npm prune --production"
 
 [start]
 command = "php artisan serve --host 0.0.0.0 --port ${PORT}"
