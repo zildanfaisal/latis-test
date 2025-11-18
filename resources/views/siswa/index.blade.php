@@ -99,6 +99,33 @@
                 border-color: #d1d5db !important;
             }
 
+            /* Styling tombol DataTables */
+            .dt-buttons .dt-button {
+                background-color: #16a34a !important;  /* Tailwind green-600 */
+                color: white !important;
+                border: none !important;
+                padding: 8px 14px !important;
+                border-radius: 6px !important;
+                font-weight: 600 !important;
+            }
+
+            .dt-buttons .dt-button:hover {
+                background-color: #15803d !important; /* lebih gelap */
+            }
+
+            .dataTables_length {
+                margin-right: 20px !important;
+            }
+
+            .dataTables_filter {
+                margin-left: 20px !important;
+            }
+
+            .dt-buttons {
+                margin-left: auto !important;
+            }
+
+
             /* Pagination container */
             .dataTables_wrapper .dt-paging .dt-paging-button {
                 background-color: #ffffff !important;
@@ -141,53 +168,55 @@
                             + Tambah Siswa
                         </a>
                     </div>
-                    <table id="dataSiswa" class="min-w-full border border-gray-300">
-                        <thead class="bg-gray-100">
-                            <tr>
-                                <th class="px-4 py-2 border">No</th>
-                                <th class="px-4 py-2 border">Foto</th>
-                                <th class="px-4 py-2 border">NIS</th>
-                                <th class="px-4 py-2 border">Nama Siswa</th>
-                                <th class="px-4 py-2 border">Lembaga</th>
-                                <th class="px-4 py-2 border">Aksi</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach ($siswas as $siswa)
-                                <tr class="text-center hover:bg-gray-50">
-                                    <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
-
-                                    <td class="px-4 py-2 border">
-                                        @if($siswa->foto)
-                                            <img src="{{ asset('storage/' . $siswa->foto) }}"
-                                                class="w-16 h-16 object-cover mx-auto rounded-full">
-                                        @else
-                                            <div class="w-16 h-16 bg-gray-200 flex items-center justify-center mx-auto rounded-full">
-                                                <span class="text-gray-500">No Image</span>
-                                            </div>
-                                        @endif
-                                    </td>
-
-                                    <td class="px-4 py-2 border">{{ $siswa->nis }}</td>
-                                    <td class="px-4 py-2 border">{{ $siswa->nama }}</td>
-                                    <td class="px-4 py-2 border">{{ $siswa->lembaga->nama_lembaga ?? 'N/A' }}</td>
-
-                                    <td class="px-4 py-2 border">
-                                        <a href="{{ route('siswa.edit', $siswa->id) }}" class="text-blue-600 hover:underline">Edit</a>
-
-                                        <form action="{{ route('siswa.destroy', $siswa->id) }}"
-                                            method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="text-red-600 hover:underline ms-4">Hapus</button>
-                                        </form>
-                                    </td>
+                    <div class="overflow-x-auto px-4">
+                        <table id="dataSiswa" class="display nowrap max-w-min">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="px-4 py-2 border">No</th>
+                                    <th class="px-4 py-2 border">Foto</th>
+                                    <th class="px-4 py-2 border">NIS</th>
+                                    <th class="px-4 py-2 border">Nama Siswa</th>
+                                    <th class="px-4 py-2 border">Lembaga</th>
+                                    <th class="px-4 py-2 border">Aksi</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+
+                            <tbody>
+                                @foreach ($siswas as $siswa)
+                                    <tr class="text-center hover:bg-gray-50">
+                                        <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
+
+                                        <td class="px-4 py-2 border">
+                                            @if($siswa->foto)
+                                                <img src="{{ asset('storage/' . $siswa->foto) }}"
+                                                    class="w-16 h-16 object-cover mx-auto rounded-full">
+                                            @else
+                                                <div class="w-16 h-16 bg-gray-200 flex items-center justify-center mx-auto rounded-full">
+                                                    <span class="text-gray-500">No Image</span>
+                                                </div>
+                                            @endif
+                                        </td>
+
+                                        <td class="px-4 py-2 border">{{ $siswa->nis }}</td>
+                                        <td class="px-4 py-2 border">{{ $siswa->nama }}</td>
+                                        <td class="px-4 py-2 border">{{ $siswa->lembaga->nama_lembaga ?? 'N/A' }}</td>
+
+                                        <td class="px-4 py-2 border">
+                                            <a href="{{ route('siswa.edit', $siswa->id) }}" class="text-blue-600 hover:underline">Edit</a>
+
+                                            <form action="{{ route('siswa.destroy', $siswa->id) }}"
+                                                method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="text-red-600 hover:underline ms-4">Hapus</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -197,14 +226,47 @@
             new DataTable('#dataSiswa', {
                 responsive: true,
                 pageLength: 10,
+                
+                dom: `
+                    <"d-flex justify-content-between align-items-center mb-3" 
+                        <"d-flex align-items-center"l f>
+                        B
+                    >
+                    rt
+                    ip
+                `,
+
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Export Excel',
+                        title: 'Data Siswa',
+                        exportOptions: { columns: [0, 2, 3, 4] },
+
+                        className: 'btn btn-success',
+                    }
+                ],
                 language: {
                     search: "Cari:",
                     lengthMenu: "Tampilkan _MENU_ data",
-                    info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
-                    paginate: {
-                        previous: "Sebelumnya",
-                        next: "Berikutnya"
-                    }
+                    info: "Menampilkan _START_ - _END_ dari _TOTAL_ data"
+                },
+
+                initComplete: function () {
+                    let column = this.api().column(4);
+                    let container = $('.dt-search');
+                    container.append('<label class="ms-4 me-2 fw-semibold">Filter Lembaga:</label>');
+
+                    let select = $('<select class="dt-input form-select"><option value="">Semua Lembaga</option></select>')
+                        .appendTo(container)
+                        .on('change', function () {
+                            let val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+
+                    column.data().unique().sort().each(function (d) {
+                        select.append('<option value="'+d+'">'+d+'</option>');
+                    });
                 }
             });
         </script>

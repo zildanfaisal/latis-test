@@ -1,21 +1,42 @@
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600">
             {{ __("Update your account's profile information and email address.") }}
-        </p>
+        </h2>
     </header>
 
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
+
+        <div class="mb-4">
+            <x-input-label for="current_photo" :value="__('Current Photo')" />
+
+            @if ($user->foto)
+                <img src="{{ asset('storage/' . $user->foto) }}" 
+                    class="w-24 h-24 rounded-full mt-2 object-cover">
+            @else
+                <p class="text-gray-500 mt-2">No photo uploaded.</p>
+            @endif
+        </div>
+
+        <div>
+            <x-input-label for="foto" :value="__('Profile Photo')" />
+
+            <input id="foto" name="foto" type="file"
+                class="mt-1 block w-full"
+                accept="image/*"
+                onchange="previewImage(event)" />
+
+            <x-input-error class="mt-2" :messages="$errors->get('foto')" />
+
+            <!-- Preview Foto Baru -->
+            <img id="preview" class="w-24 h-24 mt-3 rounded-full object-cover hidden">
+        </div>
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
@@ -47,6 +68,12 @@
             @endif
         </div>
 
+        <div>
+            <x-input-label for="position" :value="__('Position')" />
+            <x-text-input id="position" name="position" type="text" class="mt-1 block w-full" :value="old('position', $user->position)" required autocomplete="position" />
+            <x-input-error class="mt-2" :messages="$errors->get('position')" />
+        </div>
+
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
@@ -61,4 +88,12 @@
             @endif
         </div>
     </form>
+
+    <script>
+    function previewImage(event) {
+        const preview = document.getElementById('preview');
+        preview.src = URL.createObjectURL(event.target.files[0]);
+        preview.classList.remove('hidden');
+    }
+    </script>
 </section>

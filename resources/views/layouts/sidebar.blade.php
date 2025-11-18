@@ -1,7 +1,12 @@
-<aside :class="sidebarCollapsed ? 'w-20' : 'w-64'" class="hidden md:block bg-gradient-to-b from-purple-700 via-purple-600 to-blue-400 text-white shadow-lg transition-all duration-200">
+<aside :class="sidebarCollapsed ? 'w-20' : 'w-64'" class="hidden md:block bg-gradient-to-b from-orange-700 via-orange-600 to-white-400 text-white shadow-lg transition-all duration-200">
     <div class="h-full flex flex-col">
         <div class="flex items-center justify-between p-4 border-b border-white/10">
             <div class="flex items-center gap-3 flex-1">
+                <div class="flex-shrink-0">
+                    <a href="{{ route('dashboard') }}" class="block">
+                        <img src="{{ asset('images/latis-logo.webp') }}" alt="Logo" class="h-12 w-12 object-contain" />
+                    </a>
+                </div>
                 <div x-show="!sidebarCollapsed" class="leading-tight flex-1">
                     <div class="text-sm font-semibold">Latis</div>
                     <div class="text-sm font-semibold">Education</div>
@@ -63,7 +68,7 @@
                     </a>
                 </li>
                 <!-- Logout -->
-                <li>
+                <li class="divide-y mt-auto pt-2 border-t border-white/100">
                     <form action="{{ route('logout') }}" method="POST" data-logout-confirm>
                         @csrf
                         <button type="submit" title="Dashboard" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/10" :class="sidebarCollapsed ? 'justify-center' : ''">
